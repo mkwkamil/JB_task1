@@ -1,19 +1,48 @@
 ﻿namespace JB_task1;
 
-class Program
+public class Program
 {
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
-        var x = new VariableExpression("x");
-        var y = new VariableExpression("y");
-        var five = new ConstantExpression(5);
-        var three = new ConstantExpression(3);
+        var expression = new BinaryExpression(
+            new BinaryExpression(
+                new Function(
+                    FunctionKind.Sin,
+                    new BinaryExpression(
+                        new ConstantExpression(7),
+                        new BinaryExpression(
+                            new ConstantExpression(2),
+                            new VariableExpression("x"),
+                            OperatorSign.Plus
+                        ),
+                        OperatorSign.Multiply
+                    )
+                ),
+                new BinaryExpression(
+                    new ConstantExpression(7),
+                    new BinaryExpression(
+                        new ConstantExpression(2),
+                        new ConstantExpression(6),
+                        OperatorSign.Plus
+                    ),
+                    OperatorSign.Multiply
+                ),
+                OperatorSign.Minus
+            ),
+            new Function(
+                FunctionKind.Cos,
+                new VariableExpression("x")
+            ),
+            OperatorSign.Plus
+        );
 
-        var sum = new BinaryExpression(x, five, OperatorSign.Plus);
-        var sinExpr = new Function(FunctionKind.Sin, sum);
-        var subtract = new BinaryExpression(y, three, OperatorSign.Minus);
-        var finalExpr = new BinaryExpression(sinExpr, subtract, OperatorSign.Multiply);
+        Console.WriteLine("Original Expression: " + expression);
+        Console.WriteLine();
 
-        Console.WriteLine(finalExpr);
+        var optimizer = new ExpressionOptimizer();
+        var optimizedExpression = optimizer.Optimize(expression);
+
+        Console.WriteLine("Optimized Expression: " + optimizedExpression);
+        Console.WriteLine();
     }
 }
